@@ -199,10 +199,10 @@
           foreach(string baselineArg in InElement.Items.AsIs)
           {
             string[] parts = baselineArg.Split(';');
-            arguments += string.Format(@" -t {0} ""{1}""", parts[0], parts[1]);
+            arguments += string.Format(@" -t {0} {1}", parts[0], parts[1]);
           }
 					
-					base.CommandLineArguments = string.Format(@"""{0}"" -out ""{1}""  {2}", InputFilename, Out, arguments);
+					base.CommandLineArguments = string.Format(@"""{0}"" {2} -out ""{1}""", InputFilename, Out, arguments);
 					
 					Log(Level.Info, base.CommandLineArguments);
 					
@@ -234,11 +234,10 @@
 
 
   <target name="pyro.example">
-    <custom_wix_pyro verbose="true" noLogo="true" noTidy="true" inputFile="hello.wixmsp" out="out.msp">
+    <custom_wix_pyro verbose="true" noLogo="true" noTidy="false" inputFile="./patch.wixmsp" out="./patch.msp">
       <in>
         <items>
-          <include name="RTM-1;&quot;patch1.wixmst&quot;" asis="true" />
-          <include name="RTM-2;&quot;patch2.wixmst&quot;" asis="true" />
+          <include name="RTM;&quot;./patch.wixmst&quot;" asis="true" />          
         </items>
       </in>
     </custom_wix_pyro>

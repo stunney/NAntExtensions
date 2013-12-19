@@ -15,7 +15,7 @@
     </imports>
     <code>
       <![CDATA[      
-		[TaskName("custom_wix_melt")]
+		[TaskName("custom_wix_light")]
 		public class WiXMeltTask: NAnt.Core.Tasks.ExecTask
 		{
 			#region Public Instance Properties
@@ -47,10 +47,6 @@
 			[StringValidator(AllowEmpty=false)]
 			public virtual string ExtensionClassAssemblyFullyQualifiedClassName { get; set; }
 			
-      [TaskAttribute("extractBinariesTo", Required = true)]
-      [StringValidator(AllowEmpty=false)]
-      public virtual string ExtractedBinariesPath {get;set;}
-      
 			[TaskAttribute("program", Required=false)]
 			[StringValidator(AllowEmpty=false)]
 			public new string FileName
@@ -63,29 +59,25 @@
 			[BooleanValidator()]
 			public virtual bool DebugTask { get; set; }
       
-      [TaskAttribute("windowsInstallerOrMergeModuleInput", Required = true)]
-      [StringValidator(AllowEmpty=false)]
-      public virtual string InputInstallerFilename {get;set;}
-		
-      [TaskAttribute("msmWXSOutputFilename", Required = false)]
-      [StringValidator(AllowEmpty=false)]
-      public virtual string MergeModuleWXSOutputFilename {get;set;}
+      [TaskAttribute("allowIdenticalRows", Required=false)]
+			public virtual bool AllowIdenticalRows { get; set; } //-ai
       
-      [TaskAttribute("msiPDBOutputFilename", Required = false)]
-      [StringValidator(AllowEmpty=false)]
-      public virtual string MSIPDBOutputFilename {get;set;}
+      [TaskAttribute("allowUnresolvedReferences", Required=false)]
+			public virtual bool AllowUnresolvedReferences { get; set; } //-au
       
-      [TaskAttribute("msiPDBInputFilename", Required = false)]
-      [StringValidator(AllowEmpty=false)]
-      public virtual string MSIPDBInputFilename {get;set;}
+      [TaskAttribute("bindFilesIntoWixout", Required=false)]
+			public virtual bool BindFilesIntoWixout { get; set; } //-bf (requires -xo)
       
-      [TaskAttribute("msmFriendlyId", Required = false)]
+      [TaskAttribute("binderPath", Required = false)]
       [StringValidator(AllowEmpty=false)]
-      public virtual string MSMFriendlyId {get;set;}
-    
-      [TaskAttribute("exportBinariesPath", Required = false)]
+      public virtual string BinderPath {get;set;} //-b <path>
+      
+      [TaskAttribute("out", Required = true)]
       [StringValidator(AllowEmpty=false)]
-      public virtual string ExportBinariesPath {get;set;}
+      public virtual string Out {get;set;} //-out <path>
+      
+      [BuildElement("in")]
+      public virtual NAnt.Core.Tasks.InElement InElement { get; set; }
 
 			#endregion Public Instance Properties
 
@@ -99,7 +91,7 @@
 				
 				try
 				{
-					if(string.IsNullOrEmpty(base.FileName)) base.FileName = "melt.exe";
+					if(string.IsNullOrEmpty(base.FileName)) base.FileName = "light.exe";
 					
 					const string boolFormat = @" {0}";
 					const string stringFormat = @" {0} {1}";
@@ -138,11 +130,6 @@
 					}
           
           if(NoTidy) arguments += string.Format(@" -notidy");
-
-          if(!string.IsNullOrEmpty(ExtractedBinariesPath))
-          {
-            arguments += string.Format(@" -x ""{0}""", ExtractedBinariesPath);
-          }
           
 					if(!string.IsNullOrEmpty(ExtensionClassAssemblyFullyQualifiedClassName))
 					{
@@ -152,46 +139,17 @@
 					if(base.Verbose)
 					{
 						arguments += string.Format(boolFormat, @"-v");
-					}          
-
-          FileInfo inputFile = new FileInfo(InputInstallerFilename);
+					}
           
-          if(!inputFile.Exists)
-          {
-            throw new Exception(string.Format("Could not find input file {0}.", inputFile.FullName));
-          }
+          if(!string.IsNullOrEmpty(BinderPath)) arguments += string.Format(@" -b ""{0}""", BinderPath);
           
-          if(!string.IsNullOrEmpty(MergeModuleWXSOutputFilename) && !string.IsNullOrEmpty(MSIPDBOutputFilename))
-          {
-            throw new Exception("attributes, 'msmWXSOutputFilename' AND 'msiPDBOutputFilename' can not BOTH be chosen.");
-          }
+          arguments += string.Format(@" -out ""{0}""", Out);
           
-          if(!string.IsNullOrEmpty(MergeModuleWXSOutputFilename))
+          foreach(string objectFile in InElement.Items.AsIs)
           {
-            if(".msm" != inputFile.Extension.ToLower())
-            {
-              throw new Exception("You need to specify a windows installer merge module (.msm extension) in order to get WXS output.");
-            }
+            if(!File.Exists(objectFile)) throw new Exception(string.Format("File {0} not found.", objectFile));
             
-            Log(Level.Info, "Doing MergeModule Melt.");
-            
-            arguments += string.Format(@" ""{0}"" ""{1}""", inputFile.FullName, MergeModuleWXSOutputFilename);
-          }
-          else if(!string.IsNullOrEmpty(MSIPDBOutputFilename))
-          {
-            if(".msi" != inputFile.Extension.ToLower())
-            {
-              throw new Exception("You need to specify a windows installer (.msi extension) in order to get PDB output.");
-            }
-            
-            if(!File.Exists(MSIPDBInputFilename))
-            {
-              throw new Exception(string.Format("Could not find msiPDBInputFilename at {0}", MSIPDBInputFilename));
-            }
-            
-            Log(Level.Info, "Doing MSI Melt.");
-            
-            arguments += string.Format(@" ""{0}"" ""{1}"" -pdb ""{2}""", inputFile.FullName, MSIPDBOutputFilename, MSIPDBInputFilename);
+            arguments += string.Format(@" ""{0}""", objectFile);
           }
 					
 					base.CommandLineArguments = string.Format(@"{0}", arguments);
@@ -223,18 +181,14 @@
     </code>
   </script>
 
-  <target name="melt.example">
-    <custom_wix_melt
-      windowsInstallerOrMergeModuleInput="./RTM/UpgradeSample.msi"
-      msiPDBInputFilename="./RTM/UpgradeSample.wixpdb"
-      extractBinariesTo="./RTM/Melted"
-      msiPDBOutputFilename="./RTM/Melted/UpgradeSample.wixpdb"
-      verbose="true" noLogo="true" noTidy="true" allWarningsAsErrors="false" supressAllWarnings="false" />
-    <custom_wix_melt
-      windowsInstallerOrMergeModuleInput="./Upgrade/UpgradeSample.msi"
-      msiPDBInputFilename="./Upgrade/UpgradeSample.wixpdb"
-      extractBinariesTo="./Upgrade/Melted"
-      msiPDBOutputFilename="./Upgrade/Melted/UpgradeSample.wixpdb"
-      verbose="true" noLogo="true" noTidy="true" allWarningsAsErrors="false" supressAllWarnings="false" />
+  <target name="light.example">
+    <custom_wix_light out=".\patch.wixmsp"
+      verbose="true">
+      <in>
+        <items>
+          <include name="C:\Users\Stephen\Documents\Visual Studio 2012\Projects\UpgradeSample\Patch\obj\Debug\Patch.wixobj" asis="true" />
+        </items>
+      </in>
+    </custom_wix_light>
   </target>
 </project>

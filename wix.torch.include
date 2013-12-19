@@ -275,6 +275,6 @@
 	</script>
 
   <target name="torch.example">
-    <custom_wix_torch verbose="true" noLogo="true" out=".\out.wixpdb" targetInput="rtm.wixpdb" updatedInput="upgrade.wixpdb" noTidy="true" showPedanticMessages="true" wixFormatInput="true" wixFormatOutput="true" />
+    <custom_wix_torch verbose="true" out="./patch.wixmst" targetInput="RTM/Melted/UpgradeSample.wixpdb" updatedInput="Upgrade/Melted/UpgradeSample.wixpdb" wixFormatInput="true" wixFormatOutput="true" preserveUnmodifiedContent="true" />
   </target>
 </project>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Patch AllowRemoval="yes" Classification="Update" Description="TestDescription" Comments="TestComments" Manufacturer="Sample" DisplayName="[ProductName] Patch" TargetProductName="[ProductName]">
+    <PatchInformation AdminImage="yes" Compressed="yes" Platforms="x86"/>
+    <Media Id="10000" Cabinet="Patch.cab" CompressionLevel="high" EmbedCab="yes">
+      <PatchBaseline Id="RTM" />
+    </Media>
+
+    <TargetProductCodes>
+      <TargetProductCode Id="{522B8271-EC9F-46B9-8168-CBD676E6646A}"/>
+    </TargetProductCodes>
+    
+    <PatchFamily Id="Patch1" Supersede="yes" Version="1.0.0.0">
+      <ComponentRef Id="ProductComponent"/>
+    </PatchFamily>
+  </Patch>
+</Wix>
