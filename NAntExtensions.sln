@@ -9,7 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NAntScripts", "NAntScripts"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WiX", "WiX", "{DD02722D-B49A-4935-9E8D-3EDC45793DA6}"
 	ProjectSection(SolutionItems) = preProject
+		patch.example.build = patch.example.build
 		wix.heat.include = wix.heat.include
+		wix.light.include = wix.light.include
 		wix.melt.include = wix.melt.include
 		wix.pyro.include = wix.pyro.include
 		wix.torch.include = wix.torch.include
