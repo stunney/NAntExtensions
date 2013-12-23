@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <project name="SignEEBinaries" default="sign.binaries" xmlns="http://nant.sf.net/release/0.92/nant.xsd">
 	<include buildfile="global.properties.build" />
 
