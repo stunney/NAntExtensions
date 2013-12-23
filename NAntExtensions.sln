@@ -3,7 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NAntScripts", "NAntScripts", "{D028626C-0D2F-495A-9807-71681C328D28}"
 	ProjectSection(SolutionItems) = preProject
-		sign_binaries.include = sign_binaries.include
 		vscompile.include = vscompile.include
 	EndProjectSection
 EndProject
