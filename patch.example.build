@@ -5,7 +5,7 @@
 
   <!--  It should be noted that with this example assumes that you have a "Patch" project that
   is already built using something like Visual Studio that compiles the wixobj file(s) that are required
-  for the patch to go to wixmsp in the custom_wix_light task shown below -->
+  for the patch to go to wixmsp in the wix_light task shown below -->
   
   <include buildfile="wix.heat.include" />
   <include buildfile="wix.melt.include" />
@@ -27,34 +27,34 @@
   <property name="out.melt.folder" value="Melted" />
 
   <target name="example">
-    <custom_wix_melt windowsInstallerOrMergeModuleInput="${in.path.RTM}\${in.msi.prefix}.msi"
+    <wix_melt windowsInstallerOrMergeModuleInput="${in.path.RTM}\${in.msi.prefix}.msi"
                     msiPDBInputFilename="${in.path.RTM}\${in.msi.prefix}.wixpdb"
                     extractBinariesTo="${in.path.RTM}\${out.melt.folder}"
                     msiPDBOutputFilename="${in.path.RTM}\${out.melt.folder}\${in.msi.prefix}.wixpdb"
                     verbose="true" noLogo="true" noTidy="false" allWarningsAsErrors="false" supressAllWarnings="false" />
-    <custom_wix_melt windowsInstallerOrMergeModuleInput="${in.path.Upgrade}\${in.msi.prefix}.msi"
+    <wix_melt windowsInstallerOrMergeModuleInput="${in.path.Upgrade}\${in.msi.prefix}.msi"
                     msiPDBInputFilename="${in.path.Upgrade}\${in.msi.prefix}.wixpdb"
                     extractBinariesTo="${in.path.Upgrade}\${out.melt.folder}"
                     msiPDBOutputFilename="${in.path.Upgrade}\${out.melt.folder}\${in.msi.prefix}.wixpdb"
                     verbose="true" noLogo="true" noTidy="true" allWarningsAsErrors="false" supressAllWarnings="false" />
     
-    <custom_wix_torch verbose="true" out="${out.wixmst}" targetInput="${in.path.RTM}\${out.melt.folder}\${in.msi.prefix}.wixpdb" updatedInput="${in.path.Upgrade}\${out.melt.folder}\${in.msi.prefix}.wixpdb" wixFormatInput="true" wixFormatOutput="true" preserveUnmodifiedContent="true" />
+    <wix_torch verbose="true" out="${out.wixmst}" targetInput="${in.path.RTM}\${out.melt.folder}\${in.msi.prefix}.wixpdb" updatedInput="${in.path.Upgrade}\${out.melt.folder}\${in.msi.prefix}.wixpdb" wixFormatInput="true" wixFormatOutput="true" preserveUnmodifiedContent="true" />
 
-    <custom_wix_light out="${out.wixmsp}" verbose="true">
+    <wix_light out="${out.wixmsp}" verbose="true">
       <in>
         <items>
           <include name="${in.patch.wixobj}" asis="true" />
         </items>
       </in>
-    </custom_wix_light>
+    </wix_light>
 
-    <custom_wix_pyro verbose="true" noLogo="true" noTidy="false" inputFile="${out.wixmsp}" out="${out.msp}">
+    <wix_pyro verbose="true" noLogo="true" noTidy="false" inputFile="${out.wixmsp}" out="${out.msp}">
       <in>
         <items>
           <include name="${out.wixmst.baselineName};&quot;${out.wixmst}&quot;" asis="true" />
         </items>
       </in>
-    </custom_wix_pyro>
+    </wix_pyro>
 
   </target>
 

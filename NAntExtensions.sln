@@ -9,11 +9,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WiX", "WiX", "{DD02722D-B49A-4935-9E8D-3EDC45793DA6}"
 	ProjectSection(SolutionItems) = preProject
 		patch.example.build = patch.example.build
-		wix.heat.include = wix.heat.include
-		wix.light.include = wix.light.include
-		wix.melt.include = wix.melt.include
-		wix.pyro.include = wix.pyro.include
-		wix.torch.include = wix.torch.include
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HeatExampleXSL", "HeatExampleXSL", "{E1ABF4E1-E68B-4408-B669-F8D0912F699C}"
@@ -40,7 +35,19 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upgrade", "Upgrade", "{EA4E
 		PatchExample\Upgrade\UpgradeSample.wixpdb = PatchExample\Upgrade\UpgradeSample.wixpdb
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnt.Extensions.Tasks", "NAnt.Extensions\NAnt.Extensions.Tasks.csproj", "{B167CC5D-301D-4071-97C9-E040D2919032}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B167CC5D-301D-4071-97C9-E040D2919032}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B167CC5D-301D-4071-97C9-E040D2919032}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B167CC5D-301D-4071-97C9-E040D2919032}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B167CC5D-301D-4071-97C9-E040D2919032}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
