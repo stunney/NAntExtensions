@@ -35,7 +35,7 @@ using NAnt.Extensions.Functions.Microsoft;
 
 namespace NAnt.Extensions.Tasks.Microsoft
 {
-    [TaskName("sign")]
+    [TaskName("signtool")]
     public class SignTask : Task
     {
         #region Public Instance Properties
