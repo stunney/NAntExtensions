@@ -124,6 +124,25 @@ namespace NAnt.Extensions.Tasks.Microsoft
             }
         }
 
+        [TaskAttribute("msbuildpath", Required = false)]
+        [StringValidator(AllowEmpty = false)]
+        public virtual string MSBuildPath
+        {
+            get
+            {
+                return base.ExeName;
+            }
+            set
+            {
+                if (!value.ToLower().EndsWith("msbuild.exe"))
+                {
+                    throw new ArgumentException(@"msbuildpath required that ""msbuild.exe"" be at the end of the path specified.");
+                }
+
+                base.ExeName = value;
+            }
+        }
+
         [TaskAttribute("debug", Required = false)]
         [BooleanValidator()]
         public bool DebugTask
