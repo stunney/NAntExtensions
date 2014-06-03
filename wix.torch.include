@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2013-2013 Stephen Tunney, Canada (stephen.tunney@gmail.com) -->
-<!-- For an updated copy of these scripts sync to https://github.com/stunney/NAntExtensions -->
-<project name="WiX.Heat.CustomTask" xmlns="http://nant.sf.net/release/0.92/nant.xsd">
-  <target name="torch.example">
-    <custom_wix_torch verbose="true" out="./patch.wixmst" targetInput="RTM/Melted/UpgradeSample.wixpdb" updatedInput="Upgrade/Melted/UpgradeSample.wixpdb" wixFormatInput="true" wixFormatOutput="true" preserveUnmodifiedContent="true" />
-  </target>
-</project>
