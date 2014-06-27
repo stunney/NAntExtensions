@@ -74,6 +74,10 @@ namespace NAnt.Extensions.Tasks.Microsoft
         [StringValidatorAttribute(AllowEmpty = false)]
         public string TimestampURL { get; set; }
 
+        [TaskAttribute("sha1thumbprint")]
+        [StringValidatorAttribute(AllowEmpty = false)]
+        public string SHA1Thumbprint { get; set; }
+
         [BuildElement("items")]
         public FileSet Items { get; set; }
         #endregion Public Instance Properties
@@ -98,13 +102,18 @@ namespace NAnt.Extensions.Tasks.Microsoft
             {
                 // Build the argument string
                 StringBuilder args = new StringBuilder(@"sign /a ");
-                args.Append(@"/n """ + SubjectName + @""" ");
+
+                if (!String.IsNullOrEmpty(SubjectName)) args.Append(@"/n """ + SubjectName + @""" ");
+                if (!String.IsNullOrEmpty(SHA1Thumbprint)) args.Append(@"/sha1 """ + SHA1Thumbprint + @""" ");
+
                 args.Append(@"/du """ + URL + @""" ");
                 args.Append(@"/t """ + TimestampURL + @""" ");
                 // Optional arguments
                 if (Verbose) args.Append(@"/v ");
                 if (PageHashes) args.Append(@"/ph /ac """ + AdditionalCertificate + @""" ");
                 if (!String.IsNullOrEmpty(Description)) args.Append(@"/d """ + Description + @""" ");
+
+                
                 // File(s) to be signed
                 args.Append(files.ToString());
 
