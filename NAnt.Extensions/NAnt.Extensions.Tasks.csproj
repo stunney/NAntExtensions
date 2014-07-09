@@ -55,6 +55,7 @@
     <Compile Include="Functions\Microsoft\Signing.cs" />
     <Compile Include="Functions\RegexFunctions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\Checksum\ValidateChecksum.cs" />
     <Compile Include="Tasks\Microsoft\MSBuild2.cs" />
     <Compile Include="Tasks\Microsoft\SignTool.cs" />
     <Compile Include="Tasks\Microsoft\UnsignFiles.cs" />
