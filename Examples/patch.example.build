@@ -1,12 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (c) 2013-2013 Stephen Tunney, Canada (stephen.tunney@gmail.com) -->
+<!-- Copyright (c) 2013-2014 Stephen Tunney, Canada (stephen.tunney@gmail.com) -->
 <!-- For an updated copy of these scripts sync to https://github.com/stunney/NAntExtensions -->
 <project name="patch.example" default="example" xmlns="http://nant.sf.net/release/0.92/nant.xsd">
 
   <!--  It should be noted that with this example assumes that you have a "Patch" project that
   is already built using something like Visual Studio that compiles the wixobj file(s) that are required
   for the patch to go to wixmsp in the wix_light task shown below -->
-
+  <loadtasks>
+    <fileset basedir=".\">
+      <include name="..\NAntContribRelease\NAnt.Contrib.Tasks.dll" />      
+      <include name="..\NAnt.Extensions\bin\Debug\NAnt.Extensions.Tasks.dll" />
+    </fileset>
+  </loadtasks>
+  
+  <!-- Its a good idea to use the WIX env var, just so you don't have to worry about PATH everywhere in your build environments -->
+  <property name="wixBinPath" value="${environment::get-variable('WIX')}bin" />
+  
   <property name="in.path.RTM" value=".\PatchExample\RTM" />
   <property name="in.path.Upgrade" value=".\PatchExample\Upgrade" />
   <property name="in.patch.wixobj" value=".\PatchExample\Patch.wixobj" />
@@ -25,16 +34,25 @@
                     msiPDBInputFilename="${in.path.RTM}\${in.msi.prefix}.wixpdb"
                     extractBinariesTo="${in.path.RTM}\${out.melt.folder}"
                     msiPDBOutputFilename="${in.path.RTM}\${out.melt.folder}\${in.msi.prefix}.wixpdb"
-                    verbose="true" noLogo="true" noTidy="false" allWarningsAsErrors="false" supressAllWarnings="false" />
+                    verbose="true" noLogo="true" noTidy="false" allWarningsAsErrors="false" supressAllWarnings="false"
+                    program="${wixBinPath}\melt.exe" />
     <wix_melt windowsInstallerOrMergeModuleInput="${in.path.Upgrade}\${in.msi.prefix}.msi"
                     msiPDBInputFilename="${in.path.Upgrade}\${in.msi.prefix}.wixpdb"
                     extractBinariesTo="${in.path.Upgrade}\${out.melt.folder}"
                     msiPDBOutputFilename="${in.path.Upgrade}\${out.melt.folder}\${in.msi.prefix}.wixpdb"
-                    verbose="true" noLogo="true" noTidy="true" allWarningsAsErrors="false" supressAllWarnings="false" />
+                    verbose="true" noLogo="true" noTidy="true" allWarningsAsErrors="false" supressAllWarnings="false"
+                    program="${wixBinPath}\melt.exe"/>
     
-    <wix_torch verbose="true" out="${out.wixmst}" targetInput="${in.path.RTM}\${out.melt.folder}\${in.msi.prefix}.wixpdb" updatedInput="${in.path.Upgrade}\${out.melt.folder}\${in.msi.prefix}.wixpdb" wixFormatInput="true" wixFormatOutput="true" preserveUnmodifiedContent="true" />
+    <wix_torch verbose="true"
+               out="${out.wixmst}"
+               targetInput="${in.path.RTM}\${out.melt.folder}\${in.msi.prefix}.wixpdb"
+               updatedInput="${in.path.Upgrade}\${out.melt.folder}\${in.msi.prefix}.wixpdb"
+               wixFormatInput="true"
+               wixFormatOutput="true"
+               preserveUnmodifiedContent="true"               
+               program="${wixBinPath}\torch.exe"/>
 
-    <wix_light out="${out.wixmsp}" verbose="true">
+    <wix_light out="${out.wixmsp}" verbose="true" program="${wixBinPath}\light.exe">
       <in>
         <items>
           <include name="${in.patch.wixobj}" asis="true" />
@@ -42,7 +60,7 @@
       </in>
     </wix_light>
 
-    <wix_pyro verbose="true" noLogo="true" noTidy="false" inputFile="${out.wixmsp}" out="${out.msp}">
+    <wix_pyro verbose="true" noLogo="true" noTidy="false" inputFile="${out.wixmsp}" out="${out.msp}" program="${wixBinPath}\pyro.exe">
       <in>
         <items>
           <include name="${out.wixmst.baselineName};&quot;${out.wixmst}&quot;" asis="true" />
