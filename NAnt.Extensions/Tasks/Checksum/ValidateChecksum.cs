@@ -9,7 +9,7 @@ using System.Text;
 
 namespace NAnt.Extensions.Tasks.Checksum
 {
-    [TaskName("ValidateChecksum")]
+    [TaskName("validateChecksum")]
     public class ValidateChecksum : NAnt.Core.Task
     {
         [BuildElement("in", Required = true)]
@@ -36,16 +36,18 @@ namespace NAnt.Extensions.Tasks.Checksum
                     FileSet fs = InElement[idx];
                     for (int idx2 = 0; idx2 < fs.FileNames.Count; idx2++)
                     {
-                        FileInfo checksumFile = new FileInfo(fs.FileNames[idx2]);
-                        FileInfo fileToCheck = new FileInfo(NAnt.Core.Functions.PathFunctions.GetFileNameWithoutExtension(checksumFile.FullName));
+                        FileInfo fileToCheck = new FileInfo(fs.FileNames[idx2]);
+                        FileInfo checksumFile = new FileInfo(fileToCheck.FullName + '.' + Algorithm);
 
                         if (!checksumFile.Exists) throw new FileNotFoundException("Can't find checksum file", checksumFile.FullName);
                         if (!fileToCheck.Exists) throw new FileNotFoundException("Can't find file to check", fileToCheck.FullName);
 
                         string actualChecksum = contribFileFunctions.GetChecksum(fileToCheck.FullName, Algorithm);
-                        string expectedChecksum = checksumFile.OpenText().ReadToEnd();
-
-                        if (actualChecksum != expectedChecksum) throw new Exception(string.Format("The checksum generated does not match the contents of the file's counterpart.  Actual [{0}] from [{1}] was expected to be [{2}]", actualChecksum, fileToCheck.FullName, expectedChecksum));
+                        using (StreamReader sr = checksumFile.OpenText())
+                        {
+                            string expectedChecksum = sr.ReadToEnd();
+                            if (actualChecksum != expectedChecksum) throw new Exception(string.Format("The checksum generated does not match the contents of the file's counterpart.  Actual [{0}] from [{1}] was expected to be [{2}]", actualChecksum, fileToCheck.FullName, expectedChecksum));
+                        }
                     }
                 }
             }

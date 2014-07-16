@@ -45,7 +45,7 @@
       <HintPath>..\NAntContribRelease\NAnt.Contrib.Tasks.dll</HintPath>
     </Reference>
     <Reference Include="NAnt.Core">
-      <HintPath>..\NAntRelease\bin\NAnt.Core.dll</HintPath>
+      <HintPath>..\NAntContribRelease\NAnt.Core.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

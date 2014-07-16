@@ -34,6 +34,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Upgrade", "Upgrade", "{EA4E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NAnt.Extensions.Tasks", "NAnt.Extensions\NAnt.Extensions.Tasks.csproj", "{B167CC5D-301D-4071-97C9-E040D2919032}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SampleScripts", "SampleScripts", "{B1082F9A-23FF-4965-8E27-A2A70D9B9A51}"
+	ProjectSection(SolutionItems) = preProject
+		checksumTask.build = checksumTask.build
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +55,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DD02722D-B49A-4935-9E8D-3EDC45793DA6} = {D028626C-0D2F-495A-9807-71681C328D28}
+		{B1082F9A-23FF-4965-8E27-A2A70D9B9A51} = {D028626C-0D2F-495A-9807-71681C328D28}
 		{E1ABF4E1-E68B-4408-B669-F8D0912F699C} = {DD02722D-B49A-4935-9E8D-3EDC45793DA6}
 		{D38ADE69-8EB6-4030-A977-E78887BF33BB} = {DD02722D-B49A-4935-9E8D-3EDC45793DA6}
 		{D966B0BD-664B-4E8A-A214-DA35DF1325D8} = {D38ADE69-8EB6-4030-A977-E78887BF33BB}
