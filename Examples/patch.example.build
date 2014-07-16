@@ -6,12 +6,6 @@
   <!--  It should be noted that with this example assumes that you have a "Patch" project that
   is already built using something like Visual Studio that compiles the wixobj file(s) that are required
   for the patch to go to wixmsp in the wix_light task shown below -->
-  
-  <include buildfile="wix.heat.include" />
-  <include buildfile="wix.melt.include" />
-  <include buildfile="wix.pyro.include" />
-  <include buildfile="wix.torch.include" />
-  <include buildfile="wix.light.include" />
 
   <property name="in.path.RTM" value=".\PatchExample\RTM" />
   <property name="in.path.Upgrade" value=".\PatchExample\Upgrade" />
