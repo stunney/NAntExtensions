@@ -184,6 +184,8 @@ namespace NAnt.Extensions.Tasks.Microsoft
                 Log(Level.Info, "Timestamp URL: {0}", TimestampURL);
                 Log(Level.Info, "URL: {0}", URL);
                 Log(Level.Info, "FileName: {0}", FileName);
+                if(Items != null && Items.FileNames.Count > 0)
+                    Log(Level.Info, "Items.FileNames.Count: {0}", Items.FileNames.Count);                
             }
 
             StringBuilder filenames = new StringBuilder();
