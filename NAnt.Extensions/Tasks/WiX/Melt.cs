@@ -161,8 +161,8 @@ namespace NAnt.Extensions.Tasks.WiX
                 if (!string.IsNullOrEmpty(ExtractedBinariesPath))
                 {
                     arguments += string.Format(@" -x ""{0}""", ExtractedBinariesPath);
-                    if (this.ExportFilesBinariesIcons)
-                        empty += string.Format(" {0}", (object)"-xn");
+                    if (ExportFilesBinariesIcons)
+                        arguments += " -xn";
                 }
 
                 if (!string.IsNullOrEmpty(ExtensionClassAssemblyFullyQualifiedClassName))
