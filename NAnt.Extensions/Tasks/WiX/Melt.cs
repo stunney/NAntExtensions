@@ -102,6 +102,10 @@ namespace NAnt.Extensions.Tasks.WiX
         [StringValidator(AllowEmpty = false)]
         public virtual string ExportBinariesPath { get; set; }
 
+        [TaskAttribute("exportFilesBinariesIcons", Required = false)]
+        [BooleanValidator]
+        public virtual bool ExportFilesBinariesIcons { get; set; }
+
         #endregion Public Instance Properties
 
         #region Override implementation of Task
@@ -157,6 +161,8 @@ namespace NAnt.Extensions.Tasks.WiX
                 if (!string.IsNullOrEmpty(ExtractedBinariesPath))
                 {
                     arguments += string.Format(@" -x ""{0}""", ExtractedBinariesPath);
+                    if (ExportFilesBinariesIcons)
+                        arguments += " -xn";
                 }
 
                 if (!string.IsNullOrEmpty(ExtensionClassAssemblyFullyQualifiedClassName))
