@@ -80,13 +80,14 @@ namespace NAnt.Extensions.Tasks.Microsoft
 
         [BuildElement("items")]
         public FileSet Items { get; set; }
+        public static string DefaultSignToolPath = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin";
         #endregion Public Instance Properties
 
         #region Default Constructor
         public SignTask()
         {
             Retries = 2;
-            SignToolPath = @"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\Bin";
+            SignToolPath = DefaultSignToolPath;
             TimestampURL = @"http://timestamp.verisign.com/scripts/timstamp.dll";
             SubjectName = @"MyCompany.com";
             AdditionalCertificate = @"VeriSign Class 3 Public Primary Certification Authority - G5.cer";
@@ -183,7 +184,11 @@ namespace NAnt.Extensions.Tasks.Microsoft
                 Log(Level.Info, "Subject Name: {0}", SubjectName);
                 Log(Level.Info, "Timestamp URL: {0}", TimestampURL);
                 Log(Level.Info, "URL: {0}", URL);
-                Log(Level.Info, "FileName: {0}", FileName);
+                if(!string.IsNullOrEmpty(FileName))
+                    Log(Level.Info, "FileName: {0}", FileName);
+                else
+                    Log(Level.Info, "Items.FileNames.Count: {0}", Items.FileNames.Count);
+                
             }
 
             StringBuilder filenames = new StringBuilder();
@@ -201,6 +206,10 @@ namespace NAnt.Extensions.Tasks.Microsoft
                         filenames.Append(@""" ");
                         count++;
                     }
+                    else
+                    {
+                        Log(Level.Verbose, "This is already signed, so skip it: {0}", file);
+                    }                    
                     // Limit the number of files being signed in any single call to SignTool
                     if (filenames.Length > 1000)
                     {
