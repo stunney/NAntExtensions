@@ -1,4 +1,4 @@
-﻿/*
+/*
 The MIT License (MIT)
 
 Copyright (c) 2013-2014 Dave Tuchlinsky, Stephen Tunney, Canada (stephen.tunney@gmail.com)
@@ -20,41 +20,29 @@ COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
 IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
-using System;
-using System.IO;
 using NAnt.Core;
 using NAnt.Core.Attributes;
+using System.Linq;
+using System.Management.Automation;
 
 namespace NAnt.Extensions.Functions.Microsoft
 {
-    /// <summary>
-    /// 
-    /// </summary>
     [FunctionSet("signtool", "Signtool")]
-    public class SigningFunctions : NAnt.Core.FunctionSetBase
+    public class SigningFunctions : FunctionSetBase
     {
-        public SigningFunctions(Project project, PropertyDictionary dictionary)
-            : base(project, dictionary)
+        public SigningFunctions(Project project, PropertyDictionary dictionary): base(project, dictionary)
         {
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <returns></returns>
         [Function("is-signed")]
         public static bool IsSigned(string filePath)
         {
-            if (!File.Exists(filePath)) throw new FileNotFoundException(filePath);
-            try
+            using (PowerShell ps = PowerShell.Create())
             {
-                System.Security.Cryptography.X509Certificates.X509Certificate certificate = new System.Security.Cryptography.X509Certificates.X509Certificate(filePath);
-                // An exception would be thrown if the file was not signed
-                return true;
+                ps.AddCommand("Get-AuthenticodeSignature", true);
+                ps.AddParameter("FilePath", filePath);
+                return ((Signature)ps.Invoke().First().BaseObject).Status.Equals(SignatureStatus.Valid);
             }
-            catch (Exception e) { }
-            return false;
         }
     }
 }
